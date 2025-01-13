@@ -1,22 +1,20 @@
-# Using Monte-Carlo to calculate PI.
+# Using Monte-Carlo to estimate the value of PI.
 
-from random import random                                # We need the random package
+import random  # Importing the random module
 
-# Function that returns a random 2D point on the unit square
+# Function to generate a random point within the unit square
 def rain_drop():
-    return random(), random()                            # x = random(), y = random() : we return both
+    return (random.random(), random.random())  # Return a tuple (x, y)
 
-# Function that tests if a 2D point is inside the unit circle
-def drop_is_on_disk(rainDrop):
-    x, y = rainDrop                                      # We unpack rainDrop to get x and y
-    return (x - 0.5) ** 2 + (y - 0.5) ** 2 <= 0.5 ** 2   # Equation of a disk with radius 0.5 centered at (0.5; 0.5)
+# Function to check if a point lies inside the unit circle
+def drop_disk(rainDrop):
+    x, y = rainDrop  # Unpack the tuple
+    return (x - 0.5) ** 2 + (y - 0.5) ** 2 <= 0.25  # Check if the point is within the circle of radius 0.5 centered at (0.5, 0.5)
 
-# Function that calculates PI by simulating N rain drops
+# Function to compute PI using Monte-Carlo simulation with N drops
 def calculate_pi(rainDropCount):
-    landedOnDisk = 0                                     # At start, no drop on the unit disk
-    for _ in range(rainDropCount):                       # We simulate 'rainDropCount' drops
-        rainDrop = rain_drop()                           # Generating a rain drop
-        if drop_is_on_disk(rainDrop):                    # We check if the drop lands on the unit disk
-            landedOnDisk += 1                            # If yes, increment landedOnDisk
-    P = landedOnDisk / rainDropCount                     # We use our results to calculate the probability for a drop to land on the disk
-    return 4 * P                                         # We calculate PI with the formula P = 4 * PI
+    hits = 0  # Initialize the count of drops that land on the disk
+    for _ in range(rainDropCount):  # Loop over the number of drops
+        if drop_disk(rain_drop()):  # Check if the drop is on the disk
+            hits += 1  # Increment the count if it is
+    return 4 * (hits / rainDropCount)  # Estimate PI using the ratio of hits to total drops

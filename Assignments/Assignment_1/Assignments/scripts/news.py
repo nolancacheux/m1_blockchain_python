@@ -1,27 +1,27 @@
-# News sorting about cryptocurrencies
+# Cryptocurrency news sorting
 
 class News:
     
-    # Constructor
+    # Initialization
     def __init__(self, header):
-        self.header = header                              # News header
+        self.header = header                                # header of the news
 
-    def is_about_token(self, tokenName):
-        return tokenName.lower() in self.header.lower()   # Take upper/lower case into account
+    def is_about_token(self, token_name):
+        return token_name.lower() in self.header.lower()   # Case insensitive check
         
 class NewsBox:
     
-    # Constructeur
-    def __init__(self, coinName):
-        self.coinName = coinName                          # Name of the cryptocurrency to watch
-        self.savedNews = []                               # Box of news to deliver
+    # Initialization
+    def __init__(self, coin_name):
+        self.coin_name = coin_name                        # Cryptocurrency name to monitor
+        self.collected_news = []                          # Collection of relevant news
         
-    # Function that accumulates only the news about the desired cryptocurrency
+    # Method to gather news related to the specified cryptocurrency
     def deliver_news(self, news):
-        if news.is_about_token(self.coinName):            # If the recevied news is about our cryptocurrency...
-            self.savedNews.append(news)                   # We save it for later
+        if news.is_about_token(self.coin_name):           # If the news pertains to our cryptocurrency...
+            self.collected_news.append(news)              # Save it for future reference
             
-    # Function that displays all the news in the box
+    # Method to display all collected news
     def consult(self):
-        for news in self.savedNews:                       # For each news
-            print(news.header)                            # We display the news
+        for news in self.collected_news:                  # For each piece of news
+            print(news.header)                             # Display the header

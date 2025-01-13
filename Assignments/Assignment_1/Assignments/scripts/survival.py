@@ -13,33 +13,21 @@ class Node:
         self.message[index - 1] = messageBit
 
     def send_random_message_bit_to_neighbors(self):
-        ownedMessageBits = 0
-        for messageBit in self.message:
-            if messageBit:
-                ownedMessageBits += 1
+        ownedMessageBits = sum(1 for bit in self.message if bit)
         if ownedMessageBits == 0:
             return
         selectedMessageIndex = int(random() * ownedMessageBits)
         for i, messageBit in enumerate(self.message):
             if messageBit:
                 if selectedMessageIndex == 0:
-                    selectedMessageIndex = i
                     selectedMessage = messageBit
                     break
-                else:
-                    selectedMessageIndex -= 1
-        for node in self.neighbors:
-            node.deliver_message_bit(selectedMessageIndex + 1, selectedMessage)
+                selectedMessageIndex -= 1
+        for neighbor in self.neighbors:
+            neighbor.deliver_message_bit(i + 1, selectedMessage)
 
     def tell_message(self):
-        output = f'[{self.name}]'
-        for m in self.message:
-            if m == '': 
-                output += ' ???'
-            else:
-                output += ' ' + m
-        return output
-        #return f'[{self.name}] ' + ' '.join(map(lambda x: x if x else '???', self.message))
+        return f'[{self.name}] ' + ' '.join(m if m else '???' for m in self.message)
 
 class Simulation:
 
@@ -49,20 +37,15 @@ class Simulation:
         self.crashProbability = crashProbability
 
     def reboot_node_with_random_neighbors(self, nodeToReboot, potentialNeighbors):
-        neighbors = []
-        for node in potentialNeighbors:
-            if node == nodeToReboot:
-                continue
-            if random() < self.connectProbability:
-                neighbors.append(node)
+        neighbors = [node for node in potentialNeighbors if node != nodeToReboot and random() < self.connectProbability]
         nodeToReboot.reboot(neighbors)
 
     def run(self, days):
-        nodes = [Node(f'Noeud {i+1}') for i in range(self.nodeCount)]
+        nodes = [Node(f'Node {i + 1}') for i in range(self.nodeCount)]
         for node in nodes:
             self.reboot_node_with_random_neighbors(node, nodes)
             node.message = 'taking the hobbits to isengard'.split()
-        for i in range(days):
+        for _ in range(days):
             for node in nodes:
                 if random() < self.crashProbability:
                     self.reboot_node_with_random_neighbors(node, nodes)
