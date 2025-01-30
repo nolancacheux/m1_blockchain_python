@@ -6,13 +6,15 @@ class Block(Certificate):
               self.indexInBlockchain = indexInBlockchain
               self.parentBlockHash = parentBlockHash
               self.certificateList = certificateList
+              self.nonce = 0  # on initialise nonce to 0
 
        def build_payload(self):
               payload = super().build_payload()
               payload.update({
                      'indexInBlockchain': self.indexInBlockchain,
                      'parentBlockHash': self.parentBlockHash,
-                     'certificateList': [cert.build_payload() for cert in self.certificateList]
+                     'certificateList': [cert.build_payload() for cert in self.certificateList],
+                     'nonce': self.nonce  # on inclut le nonce in the payload
               })
               return payload
        
@@ -41,6 +43,7 @@ class Block(Certificate):
               result.update({
                      'index': self.indexInBlockchain,
                      'parent': self.parentBlockHash,
-                     'certificates': [cert.display() for cert in self.certificateList]
+                     'certificates': [cert.display() for cert in self.certificateList],
+                     'nonce': self.nonce  # Include nonce in the display
               })
               return result

@@ -1,5 +1,4 @@
 from certificate import Certificate
-from helpers import timestamp
 
 class StakingOperation(Certificate):
     
