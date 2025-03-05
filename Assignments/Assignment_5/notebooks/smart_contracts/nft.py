@@ -1,4 +1,4 @@
-from smart_contract import SmartContractDefinition, SmartContractWritingOperation, WritingOperationArguments
+from smart_contract import SmartContractDefinition, SmartContractWritingOperation, SmartContractWritingOperation
 
 class SmartContract():
     
@@ -10,7 +10,7 @@ class SmartContract():
         self.start_mint_timestamp = start_mint_timestamp
         self.mint_time = mint_time
 
-    def mint(self, operation_arguments: WritingOperationArguments) -> tuple[int, str]:
+    def mint(self, operation_arguments: SmartContractWritingOperation) -> tuple[int, str]:
         if self.token_id >= self.max_token:
             return None, "Maximum number of tokens reached"
         if operation_arguments.timestamp < self.start_mint_timestamp or operation_arguments.timestamp > self.start_mint_timestamp + self.mint_time:
@@ -24,7 +24,7 @@ class SmartContract():
         return SmartContractWritingOperation(issuerPublicKey, targetSmartContract.hash(), "mint")
         
     
-    def transfer(self, to: str, token_id: int, operation_arguments: WritingOperationArguments) -> tuple[None , str]:
+    def transfer(self, to: str, token_id: int, operation_arguments: SmartContractWritingOperation) -> tuple[None , str]:
         if self.token_owners[token_id] == to:
             # raise Exception("You are already the owner of this token")
             # print("You are already the owner of this token")
