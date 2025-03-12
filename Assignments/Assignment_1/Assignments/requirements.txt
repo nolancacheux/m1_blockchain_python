@@ -1,3 +1,0 @@
-pycryptodome==3.16.0  # Used for simple cryptography operations
-jupyter               # User interface for coding and testing (IDE used in this course)
-matplotlib            # Some graphical library
